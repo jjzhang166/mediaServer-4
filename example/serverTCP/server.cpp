@@ -10,6 +10,14 @@ void WriteError(std::string msg)
 const int CONST_PORT = 8111;
 const int Qlen = 10;
 const int MSG_LEN = 1 << 10;
+void readline(char *buff)
+{
+    char ch;
+    char *s = buff;
+    while ((ch = getchar()) != '\n')
+        *s++ = ch;
+    *s = '\0';
+}
 int main(int argc, char **argv)
 {
     int ret = -1;
@@ -43,10 +51,14 @@ int main(int argc, char **argv)
         for (;;)
         {
             ret = recv(accept_fd, in_buff, MSG_LEN, 0);
-            if (ret == 0)
-                break;
+            if (ret < 0)
+                WriteError("Failed to recv msg!");
             std::cout << "recv from clnt: " << in_buff << std::endl;
-            send(accept_fd, in_buff, MSG_LEN, 0);
+            std::cout << "send to clnt:" << std::endl;
+            readline(in_buff);
+            if (strcmp(in_buff, "quit") == 0)
+                WriteError("Stop to connect clnt!");
+            send(accept_fd, in_buff, sizeof(in_buff), 0);
         }
         close(accept_fd);
     }

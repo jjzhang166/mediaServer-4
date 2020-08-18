@@ -37,15 +37,17 @@ int main(int argc, char **argv)
         WriteError("Failed to connect server!");
     for (;;)
     {
+        std::cout << "send to server:" << std::endl;
         readline(send_msg);
         if (strcmp(send_msg, "quit") == 0)
-            break;
-        ret = send(sock_fd, send_msg, MSG_LEN, 0);
+            WriteError("Stop to connect server!");
+        ret = send(sock_fd, send_msg, sizeof(send_msg), 0);
         if (ret < 0)
             WriteError("Faile to send msg!");
         ret = recv(sock_fd, recv_msg, MSG_LEN, 0);
-        recv_msg[ret] = '\0';
-        std::cout << "send to server: " << recv_msg << std::endl;
+        if (ret < 0)
+            WriteError("Failed to recv msg!");
+        std::cout << "recv from server: " << recv_msg << std::endl;
     }
     close(sock_fd);
 }
