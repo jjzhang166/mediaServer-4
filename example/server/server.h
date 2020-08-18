@@ -5,13 +5,16 @@
  */
 #ifndef __SERVER_H__
 #define __SERVER_H__
-namespace qp_Server{
-class Server{
+namespace qp_Server
+{
+class Server
+{
 public:
 	Server();
 	~Server();
-public:	
+
+public:
 	void run();
-}; 
 };
+};	   // namespace qp_Server
 #endif //__SERVER_H__
